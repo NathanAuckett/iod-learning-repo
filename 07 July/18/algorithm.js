@@ -1,7 +1,7 @@
 const { json } = require("body-parser");
 let jsonObject = `
 {
-    "status": false,
+    "status": true,
     "message": "Getting value succesfully"
     "data": [
         {
@@ -19,6 +19,10 @@ let jsonObject = `
         {
             "name": "Sammy4",
             "age": 40
+        },
+        {
+            "name": "Sammy5",
+            "age": 100
         }
     ]
 }`;
