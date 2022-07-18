@@ -2,7 +2,7 @@ const { json } = require("body-parser");
 let jsonObject = `
 {
     "status": false,
-    "message": "Getting value succesfully"
+    "message": "Test Conflict commit"
     "data": [
         {
             "name": "Sammy1",
