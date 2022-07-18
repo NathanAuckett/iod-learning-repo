@@ -19,6 +19,10 @@ let jsonObject = `
         {
             "name": "Sammy4",
             "age": 40
+        },
+        {
+            "name": "Sammy5",
+            "age": 100
         }
     ]
 }`;
