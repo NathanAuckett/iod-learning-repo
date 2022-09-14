@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  
+  <body>
+    <header>
+      <nav>
+        <!-- works like <a href="/index.html">Home</a> -->
+        <a href="./index.html">Home</a> <a href="#">Form</a>
+      </nav>
+    </header>
+
+    <form method="POST" action="http://localhost:3000/profile">
+        <label>First Name</label>
+        <input type="text" name="firstName" value="first name">
+        <label>Last Name</label>
+        <input type="text" name="lastName" value="last name">
+        <label>Checkobox</label>
+        <input type="radio" name="checkbox">
+
+        <label>Selectomondo</label>
+        <select name="Selectomondo">
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+        </select>
+
+        <button type="submit">Submit Form</button>
+    </form>
+
+    <main>
+
+    </main>
+
+    <footer>Copyright 2021 &copy;</footer>
+
+  </body>
+</html>

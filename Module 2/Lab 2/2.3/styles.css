@@ -1,0 +1,85 @@
+
+.top {
+    position: static;
+    top: 300;
+    height: 500px;
+    background-color: rgb(135, 51, 51);
+}
+.background {
+    position: relative;
+    height: 100vh;
+    background-image: url('https://images.pexels.com/photos/1968177/pexels-photo-1968177.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+    background-size: cover;
+    background-clip: border-box;
+}
+.background-1 {
+    background-color: antiquewhite;
+}
+.background-2 {
+    background-color: blueviolet;
+}
+.background-3 {
+    background-color: aqua;
+}
+.background-4 {
+    background-color: coral;
+}
+.overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    right: 0;
+}
+.overlay > h1 {
+    text-align: center;
+}
+
+.flex-container {
+    display: flex;
+}
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+.flex-space-between {
+    justify-content: space-between;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.h-80 {
+    height: 80px;
+}
+.h-400 {
+    height: 400px;
+}
+.w-80 {
+    width: 80px;
+}
+
+.m-20 {
+    margin: 20px;
+}
+
+.flex-item-1 {
+    flex: 1;
+}
+.flex-item-2 {
+    flex: 2;
+}
+.flex-item-3 {
+    flex: 3;
+}
+.flex-item-4 {
+    flex: 4;
+}
+
+.flex-basis-item-50 {
+    flex-basis: 90%;
+}
