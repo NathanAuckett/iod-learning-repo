@@ -1,0 +1,61 @@
+
+<html>
+    <body>
+        <div id="artist-list"></div>
+    </body>
+</html>
+
+<template id="artist-template">
+    <h1 class="artist-name">Artist Name</h1>
+    <div class="portfolio"></div>
+</template>
+
+<template id="portfolio-card">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title"></h2>
+            <img class="card-image"></img>
+        </div>
+    </div>
+</template>
+
+
+
+<script>
+    const artist = {
+        name:"Van Gogh",
+        portfolio:[
+            {
+                title:"portrait",
+                url:"https://collectionapi.metmuseum.org/api/collection/v1/iiif/436532/1671316/main-image"
+            },
+            {
+                title:"sky",
+                url:"https://mymodernmet.com/wp/wp-content/uploads/2020/11/White-house-night-van-goh-worldwide-2.jpg"
+            },
+        ]
+    }
+
+    
+
+    function addArtist(_artist) {
+        const artist = document.getElementById("artist-template").content.cloneNode(true); //Create artist card
+        artist.querySelector('.artist-name').innerText = _artist['name'];
+        console.log(artist);
+
+        //Loop through portfolio and add a portfolio card for every object in the array
+        for (i of _artist.portfolio){
+            const portfolio = document.getElementById("portfolio-card").content.cloneNode(true);
+            portfolio.querySelector('.card-title').innerText = i["title"];
+            portfolio.querySelector('.card-image').src = i["url"];
+            artist.querySelector('.portfolio').appendChild(portfolio);
+        }
+
+        document.querySelector('#artist-list').appendChild(artist);
+        
+        
+    }
+
+    addArtist(artist);
+
+</script>
