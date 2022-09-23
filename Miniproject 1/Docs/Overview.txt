@@ -1,0 +1,16 @@
+Some more info on the mini-project:
+It's something that should take roughly 8-10 hours to do and be based on recent modules covered.
+Mini-Project #1: Create a website which displays data from an API (HTML/CSS/JavaScript)
+This API might be a public one (let me know if you'd like some examples) or you might want to create your own JSON file and serve it using the json-server tool. Make sure you spend some time thinking (and documenting) about the features you want to include, what it will look like, and how it will work before you start (use the ideas from Module 4), and try to include the templating technique from Module 4 when displaying your data. Another idea is to include some forms for the user to POST/PUT data back to the API as well (not all support this).
+
+Here are some questions to try and cover during your in-class presentation (about 10 minutes)
+1. What was your requirements gathering and design process? Was it useful/successful?
+2. Give a high level overview of your application and its features
+3. Where does its data come from (external/internal APIs)?
+4. How does the back end process this data?
+5. How can the user interact with this data?
+6. What JS techniques have you used (eg. objects/arrays/DOM functions/loops/functions/ifs)?
+7. What external tools/libraries have you used (eg. bootstrap/axios/charts)? How? Why?
+8. What kinds of HTML elements have you used (eg. tables, forms, divs, lists, headings, menus, videos, images)?
+9. What kinds of CSS features have you used (eg. animations, backgrounds, fonts, colours, flexbox, grid)?
+10. How might you extend the features of your application in future?

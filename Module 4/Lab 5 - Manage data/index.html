@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="articles">
+
+    </div>
+</body>
+
+<template id="article">
+    <h1 class="title"></h1>
+    <p class="content"></p>
+</template>
+
+<script>
+    let news = [
+        { id: 1, title: 'News1', content:"bla"},
+        { id: 2, title: 'News2', content:"ble"},
+        { id: 3, title: 'News3', content:"blu"}
+    ];
+
+    function updateNews(){
+        document.getElementById("articles").innerHTML = "";
+        news.forEach((i) => {
+            const article = document.getElementById("article").content.cloneNode(true);
+            article.querySelector('.title').innerText = i["title"];
+            article.querySelector('.content').innerText = i["content"];
+            document.querySelector('#articles').appendChild(article);
+        });
+        console.log("news updated!");
+    }
+
+    updateNews();
+
+    setInterval(updateNews, 5000);
+
+</script>
+
+</html>
