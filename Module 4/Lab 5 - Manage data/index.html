@@ -7,6 +7,21 @@
     <title>Document</title>
 </head>
 <body>
+    <div>
+        <form>
+            <h2>Add news:</h2>
+            <div>
+                <label for="title">Title</label>
+                <div><input id="title" type="text" style="width: 500px"></input></div>
+            </div>
+            <div>
+                <div><label for="desc">Description:</label></div>
+                <textarea id="desc" style="width: 500px; height: 200px;"></textarea>
+            </div>
+            <input type="button" value="Add" onclick="addNews()"></input>
+        </form>
+    </div>
+    <h2>The news:</h2>
     <div id="articles">
 
     </div>
@@ -23,6 +38,12 @@
         { id: 2, title: 'News2', content:"ble"},
         { id: 3, title: 'News3', content:"blu"}
     ];
+
+    function addNews(){
+        const title = document.getElementById("title").value;
+        const content = document.getElementById("desc").value;
+        news.push({title: title, content: content});
+    }
 
     function updateNews(){
         document.getElementById("articles").innerHTML = "";
