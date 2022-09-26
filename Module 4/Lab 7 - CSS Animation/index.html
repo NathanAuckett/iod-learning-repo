@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <style>
+        #theBox {
+            background-color: red;
+            width: 100px;
+            height: 100px;
+
+            animation-duration: 2s;
+            animation-name: anim;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+            animation-direction: alternate;
+        }
+
+        @keyframes anim {
+            from {
+                margin-top: 0px;
+                background-color: red;
+            }
+
+            to {
+                margin-top: 100px; 
+                background-color: blue;
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+    <div id="theBox"></div>
+</body>
+
+</html>
+
