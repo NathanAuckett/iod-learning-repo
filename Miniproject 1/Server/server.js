@@ -9,14 +9,14 @@ const BANK = BANK_FORMATS.BANKWEST;
 
 const app = express();
 app.use(cors());
-const port = 3000
+const port = 3000;
 
 
 
 //Read CSV file into memory
 console.log("Loading source file...");
 
-let sourceFile = `D:\\Dropbox\\Projects\\Financialinator\\All Account Transactions_01-01-22 - 03-10-22.csv`;
+let sourceFile = `./dummyData.csv`;
 
 const csvData = readFileSync(sourceFile);
 
@@ -24,14 +24,14 @@ console.log(`Source data loaded. String length: ${csvData.length}`);
 
 const csvDataArray = parse(csvData); //Parses csv string into 2D array representing grid like structure. First row is headers, following rows are data.
 
-// Fields included in CSV to leave out of data.
+// Fields included in CSV to leave out of final data as it is not needed.
 const throwAwayFields = ["BSB Number", "Cheque Number", "Transaction Type"];
 
 
 //Convert resulting 2D array of CSV data to JSON, array of objects with key value pairs
 let jsonData = [];
 
-// Extract headings from data. Leavig in throw aways to keep arrays parallel for data extraction
+// Extract headings from data. Leavig in throw-aways to keep arrays parallel for data extraction
 let props = [];
 for (let i of csvDataArray[0]){
 	props.push(i);

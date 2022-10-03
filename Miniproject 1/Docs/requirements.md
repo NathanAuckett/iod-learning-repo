@@ -8,7 +8,9 @@ The app should display a table of all data, as well as a line graph indicating t
 
 User should be able to filter the data down to smaller time incriments, or down to categories.
 
-## How will the funtionality work
+## How will the app work
+Data will be served via a custom locally hosted API. This will read the CSV bank transaction data and serve it to the we-app on request.
+
 Categories will be autopmatically applied based on the naration/description of the transaction in the CSV data.
 
 Key words will be used to determine what description should go into which a specific category.

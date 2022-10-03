@@ -73,6 +73,15 @@ async function getAllData(){
     else{
         document.getElementById("chart").style.display = "none";
     }
+
+    const totalContainer = document.getElementById("totalContainer");
+    if (document.getElementById("category").value){
+        document.getElementById("total").innerHTML = calcTotalSpendingsOfData();
+        totalContainer.style.display = "";
+    }
+    else{
+        totalContainer.style.display = "none";
+    }
 }
 window.getAllData = getAllData;
 
@@ -123,7 +132,27 @@ function getCategoriesFromData(){
 }
 
 
-//Takes a date and sperator character, like /, and reverses the date. So dd:mm:yyyy becomes yyyy:mm:dd
+function calcTotalSpendingsOfData(){
+    let rows = jsonData[1].length;
+    console.log(`Calculating totals for ${rows} of data.`);
+    let total = 0;
+    if (rows > 0){
+        for (let row of jsonData[1]){
+            let debit = row[BANK[BANK_FORMATS.DEBIT]];
+            if (debit){
+                total += parseFloat(debit);
+            }
+            let credit = row[BANK[BANK_FORMATS.CREDIT]];
+            if (credit){
+                total += parseFloat(credit);
+            }
+        }
+    }
+    
+    return total;
+}
+
+//Takes a date and seperator character, like /, and reverses the date. So dd:mm:yyyy becomes yyyy:mm:dd
 function goodDateToBad(dateStr, seperator){
     let dateArray = dateStr.split(seperator);
     return dateArray[1] + "/" + dateArray[0] + "/" + dateArray[2];
@@ -169,7 +198,7 @@ function balanceData(){
 function spendingsData(){
     /*
     This function filters that data in order to only display the latest entry for any specific date.
-    This prevents multiple entry points per day on the graph and makes the graph more readable as a result
+    This prevents multiple entry points per day on the graph and makes the graph more readable as a result.
     */
     let fitleredData = [];
 
@@ -224,7 +253,6 @@ function renderChart(){
     }
     
     const data = {
-        //labels: [],
         datasets: [{
             label: 'Balance /day',
             data: balanceData(),
