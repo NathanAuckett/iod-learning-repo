@@ -130,7 +130,7 @@ function goodDateToBad(dateStr, seperator){
 }
 
 
-function chartData(){
+function balanceData(){
     /*
     This function filters that data in order to only display the latest entry for any specific date.
     This prevents multiple entry points per day on the graph and makes the graph more readable as a result
@@ -138,31 +138,82 @@ function chartData(){
     let fitleredData = [];
 
     let rows = jsonData[1].length;
-    //console.log(`Graph data starting rows: ${rows}`);
-    let lastDate = jsonData[1][rows - 1][BANK[BANK_FORMATS.DATE]];
-    for (let i = rows - 1; i > 0 ; i --){
-        let row = jsonData[1][i];
-        let thisDate = row[BANK[BANK_FORMATS.DATE]];
-        if (thisDate != lastDate){
-            
-            let obj = {};
-            obj["x"] = new Date(goodDateToBad(lastDate, "/"));
-            
-            let prevRow = i == rows - 1 ? row : jsonData[1][i + 1];
-            obj["y"] = prevRow[BANK[BANK_FORMATS.BALANCE]];
+    console.log(`Graph data starting rows: ${rows}`);
+    if (rows > 0){
+        let lastDate = jsonData[1][rows - 1][BANK[BANK_FORMATS.DATE]];
+        for (let i = rows - 1; i > -1 ; i --){
+            let row = jsonData[1][i];
+            let thisDate = row[BANK[BANK_FORMATS.DATE]];
+            if (thisDate != lastDate){
+                let obj = {};
+                obj["x"] = new Date(goodDateToBad(lastDate, "/"));
+                
+                let prevRow = i == rows - 1 ? row : jsonData[1][i + 1];
+                obj["y"] = prevRow[BANK[BANK_FORMATS.BALANCE]];
 
-            fitleredData.push(obj);
+                fitleredData.push(obj);
+            }
+            lastDate = thisDate;
         }
-        lastDate = thisDate;
+
+        let obj = {};
+        obj["x"] = new Date(goodDateToBad(jsonData[1][0][BANK[BANK_FORMATS.DATE]], "/"));
+        obj["y"] = jsonData[1][0][BANK[BANK_FORMATS.BALANCE]];
+
+        fitleredData.push(obj);
     }
+    console.log(`Graph data ending rows: ${fitleredData.length}`);
+    return fitleredData;
+}
 
-    let obj = {};
-    obj["x"] = new Date(goodDateToBad(jsonData[1][0][BANK[BANK_FORMATS.DATE]], "/"));
-    obj["y"] = jsonData[1][0][BANK[BANK_FORMATS.BALANCE]];
+function spendingsData(){
+    /*
+    This function filters that data in order to only display the latest entry for any specific date.
+    This prevents multiple entry points per day on the graph and makes the graph more readable as a result
+    */
+    let fitleredData = [];
 
-    fitleredData.push(obj);
+    let rows = jsonData[1].length;
+    console.log(`Graph data starting rows: ${rows}`);
+    if (rows > 0){
+        let lastDate = jsonData[1][rows - 1][BANK[BANK_FORMATS.DATE]];
+        let totalSpent = 0;
+        for (let i = rows - 1; i > -1 ; i --){
+            let row = jsonData[1][i];
+            let spent = 0;
 
-    //console.log(`Graph data starting rows: ${fitleredData.length}`);
+            let debit = row[BANK[BANK_FORMATS.DEBIT]];
+            if (debit){
+                spent += parseFloat(debit);
+            }
+            let credit = row[BANK[BANK_FORMATS.CREDIT]];
+            if (credit){
+                spent += parseFloat(credit);
+            }
+
+            let thisDate = row[BANK[BANK_FORMATS.DATE]];
+            if (thisDate != lastDate){
+                let obj = {};
+                obj["x"] = new Date(goodDateToBad(lastDate, "/"));
+                obj["y"] = totalSpent;
+
+                fitleredData.push(obj);
+                totalSpent = 0;
+            }
+            totalSpent += spent;
+            lastDate = thisDate;
+        }
+
+        let obj = {};
+        obj["x"] = new Date(goodDateToBad(jsonData[1][0][BANK[BANK_FORMATS.DATE]], "/"));
+        obj["y"] = totalSpent;
+        
+        fitleredData.push(obj);
+    }
+    console.log(`Graph data ending rows: ${fitleredData.length}`);
+
+    console.log(fitleredData);
+
     return fitleredData;
 }
 
@@ -173,10 +224,10 @@ function renderChart(){
     }
     
     const data = {
-        labels: [],
+        //labels: [],
         datasets: [{
-            label: 'Balance',
-            data: chartData(),
+            label: 'Balance /day',
+            data: balanceData(),
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -193,7 +244,7 @@ function renderChart(){
                 'rgba(153, 102, 255, 1)',
                 'rgba(255, 159, 64, 1)'
             ],
-            borderWidth: 1
+            borderWidth: 3
         }]
     }
 
@@ -211,6 +262,16 @@ function renderChart(){
         },
         data: data
     }
+
+    //If category is set, change the graph tpo bar graph and use spendings data instead of balance
+    let category = document.getElementById("category").value;
+    if (category){
+        data.datasets[0].label = "Total transaction /day";
+        data.datasets[0].data = spendingsData();
+        config.type = "bar";
+        config.data = data;
+    }
+    
     chart = new Chart(document.getElementById('chart'), config);
 }
 

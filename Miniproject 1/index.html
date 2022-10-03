@@ -15,10 +15,6 @@
             <h1>Finacialinator!</h1>
         </div>
     </div>
-    
-    <div class="row">
-        <canvas id="chart" style="display:none"></canvas>
-    </div>
 
     <label for="account">Account Number</label>
     <select id="account" onchange="accountChange()">
@@ -56,6 +52,10 @@
         <option value="">All</option>
     </select>
     
+    <div class="row">
+        <canvas id="chart" style="display:none"></canvas>
+    </div>
+
     <div class="row">
         <table id="data" class="table table-striped">
             <!--Data display here-->

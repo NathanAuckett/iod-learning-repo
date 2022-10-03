@@ -53,11 +53,13 @@ for (let row = 1; row < dataLength - 1; row ++){ //Loop each row starting at 1 a
 	}
 	dataArray.push(obj); //Add object to array.
 }
+console.log(`Data loaded. Row count: ${dataArray.length}`);
 
 //Remove throw away fields from props now that parrelel reading is no longer an issue
 props = props.filter((i) => !BANK[BANK_FORMATS.LEAVE_OUT_FIELDS].includes(i));
 props.push(BANK_FORMATS.CATEGORY);
-console.log(props);
+
+console.log(`Data headers: [${props}]`);
 
 jsonData.push(props); //Push headings into JSON
 jsonData.push(dataArray); //Push data into JSON
