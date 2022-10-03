@@ -1,16 +1,22 @@
 import express from 'express';
-import cors from 'cors'
-import { parse } from '@vanillaes/csv'
-import {readFileSync} from 'fs'
+import cors from 'cors';
+import { parse } from '@vanillaes/csv';
+import {readFileSync} from 'fs';
+import {getCategory} from "./categories.js";
+
+import * as BANK_FORMATS from "./bankFormats.js";
+const BANK = BANK_FORMATS.BANKWEST;
 
 const app = express();
 app.use(cors());
 const port = 3000
 
+
+
 //Read CSV file into memory
 console.log("Loading source file...");
 
-let sourceFile = `D:\\Dropbox\\Projects\\Financialinator\\All Account Transactions_01-01-22 - 12-08-22.csv`;
+let sourceFile = `D:\\Dropbox\\Projects\\Financialinator\\All Account Transactions_01-01-22 - 03-10-22.csv`;
 
 const csvData = readFileSync(sourceFile);
 
@@ -20,6 +26,7 @@ const csvDataArray = parse(csvData); //Parses csv string into 2D array represent
 
 // Fields included in CSV to leave out of data.
 const throwAwayFields = ["BSB Number", "Cheque Number", "Transaction Type"];
+
 
 //Convert resulting 2D array of CSV data to JSON, array of objects with key value pairs
 let jsonData = [];
@@ -40,12 +47,16 @@ for (let row = 1; row < dataLength - 1; row ++){ //Loop each row starting at 1 a
 		if (!throwAwayFields.includes(prop)){
 			obj[prop] = csvDataArray[row][col];
 		}
+		if (prop == BANK[BANK_FORMATS.DESCRIPTION]){
+			obj[BANK_FORMATS.CATEGORY] = getCategory(obj[prop]);
+		}
 	}
 	dataArray.push(obj); //Add object to array.
 }
 
 //Remove throw away fields from props now that parrelel reading is no longer an issue
-props = props.filter((i) => !throwAwayFields.includes(i));
+props = props.filter((i) => !BANK[BANK_FORMATS.LEAVE_OUT_FIELDS].includes(i));
+props.push(BANK_FORMATS.CATEGORY);
 console.log(props);
 
 jsonData.push(props); //Push headings into JSON
@@ -58,10 +69,10 @@ function goodDateToBad(dateStr, seperator){
 	return dateArray[1] + "/" + dateArray[0] + "/" + dateArray[2];
 }
 
-function filterToMonth(srcData, monthNum, dateKeyName){
+function filterToMonth(srcData, monthNum){
 	let data = [];
 	let entries = srcData[1].filter((element) =>{
-		let eleDate = new Date(goodDateToBad(element[dateKeyName], "/"));
+		let eleDate = new Date(goodDateToBad(element[BANK[BANK_FORMATS.DATE]], "/"));
 		if (eleDate.getMonth() === monthNum){
 			return element;
 		}
@@ -73,11 +84,14 @@ function filterToMonth(srcData, monthNum, dateKeyName){
 	return data;
 }
 
-function filterToDay(srcData, dayNum, dateKeyName){
+function filterToWeek(srcData, weekNum){
 	let data = [];
 	let entries = srcData[1].filter((element) =>{
-		let eleDate = new Date(goodDateToBad(element[dateKeyName], "/"));
-		if (eleDate.getDate() === dayNum){
+		let eleDate = new Date(goodDateToBad(element[BANK[BANK_FORMATS.DATE]], "/"));
+		eleDate = eleDate.getDate();
+		eleDate = Math.floor(eleDate / 7); //Convert day to week
+
+		if (eleDate === weekNum){
 			return element;
 		}
 	});
@@ -88,10 +102,24 @@ function filterToDay(srcData, dayNum, dateKeyName){
 	return data;
 }
 
-function filterToAccount(srcData, accountNum, accountKeyName){
+function filterToAccount(srcData, accountNum){
 	let data = [];
 	let entries = srcData[1].filter((element) =>{
-		if (element[accountKeyName] === accountNum){
+		if (element[BANK[BANK_FORMATS.ACCOUNT_NUMBER]] === accountNum){
+			return element;
+		}
+	});
+	
+	data.unshift(entries);
+	data.unshift(props);
+
+	return data;
+}
+
+function filterToCategory(srcData, category){
+	let data = [];
+	let entries = srcData[1].filter((element) =>{
+		if (element[BANK_FORMATS.CATEGORY] === category){
 			return element;
 		}
 	});
@@ -108,17 +136,22 @@ app.get('/', (req, res) => { //Return all data
 	let returnData = jsonData;
 
 	let month = req.query.month;
-	let day = req.query.day;
+	let week = req.query.week;
 	let account = req.query.account;
+	let category = req.query.category;
 	
 	if (account){
-		returnData = filterToAccount(returnData, account, "Account Number");
+		returnData = filterToAccount(returnData, account);
+	}
+
+	if (category){
+		returnData = filterToCategory(returnData, category);
 	}
 
 	if (month){
-		returnData = filterToMonth(returnData, parseInt(month), "Transaction Date");
-		if (day){
-			returnData = filterToDay(returnData, parseInt(day), "Transaction Date");
+		returnData = filterToMonth(returnData, parseInt(month));
+		if (week){
+			returnData = filterToWeek(returnData, parseInt(week));
 		}
 	}
 

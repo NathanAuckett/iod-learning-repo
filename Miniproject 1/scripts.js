@@ -3,15 +3,19 @@ Data is returned as JSON.
 
 array[0] = array of headers
 array[1] = array of objects containing key value pairs, where each key is a header from array [0]. Every object contains every key, although some may contain empty string values.
-
 */
+
+import * as BANK_FORMATS from "./Server/bankFormats.js";
+const BANK = BANK_FORMATS.BANKWEST;
 
 let firstTimeSetupComplete = false;
 const baseURL = "http://127.0.0.1:3000";
 let jsonData;
 let accounts = [];
-accountCurrent = "";
+let accountCurrent = "";
+let chart;
 
+//Populate the table with data
 function createTable(){
     const table = document.getElementById("data");
     table.innerHTML = "";
@@ -35,7 +39,7 @@ function createTable(){
         for (let i = 0; i < colLength; i ++){
             let value = col[jsonData[0][i]];
 
-            ele = document.createElement("td");
+            let ele = document.createElement("td");
             ele.innerHTML = value;
 
             rowElement.append(ele);
@@ -47,14 +51,14 @@ function createTable(){
     table.append(tableBody);
 }
 
-
-async function getAllData(url){
-    
+//Get data, run first time setup, run createTable and renderChart if account is selected
+async function getAllData(){
     const account = document.getElementById("account").value;
+    const category = document.getElementById("category").value;
     const month = document.getElementById("month").value;
-    const day = document.getElementById("day").value;
+    const week = document.getElementById("week").value;
     
-    const data = await fetch(url+`?account=${account}&month=${month}&day=${day}`);
+    const data = await fetch(baseURL+`?account=${account}&category=${category}&month=${month}&week=${week}`);
     jsonData = await data.json();
 
     console.log("Data collected");
@@ -62,34 +66,60 @@ async function getAllData(url){
     
     firstTimeSetup();
     createTable();
-    renderChart();
+    if (accountCurrent){
+        document.getElementById("chart").style.display = "";
+        renderChart();
+    }
+    else{
+        document.getElementById("chart").style.display = "none";
+    }
 }
+window.getAllData = getAllData;
 
+//This function runs once on the first call of getData to extract information and populate fields within the DOM
 function firstTimeSetup(){
     if (!firstTimeSetupComplete){
         firstTimeSetupComplete = true;
         getAccountNumbersFromData();
+        getCategoriesFromData();
     }
 }
 
-
+//Extracts account numbers from data and populates account dropdown
 function getAccountNumbersFromData(){
     for (let col of jsonData[1]){
-        let accNum = col["Account Number"];
+        let accNum = col[BANK[BANK_FORMATS.ACCOUNT_NUMBER]];
         if (!accounts.includes(accNum)){
             accounts.push(accNum);
         }
     }
-
-    for (a of accounts){
-        let selector = document.getElementById("account");
+    
+    let selector = document.getElementById("account");
+    for (let a of accounts){
         let op = document.createElement(`option`);
         op.innerHTML = a;
         op.value = a;
         selector.append(op);
     }
+}
 
-    accountCurrent = accounts[0];
+//Extracts categories from data and populates category dropdown
+function getCategoriesFromData(){
+    const categories = [];
+    for (let col of jsonData[1]){
+        let cat = col[BANK_FORMATS.CATEGORY];
+        if (!categories.includes(cat)){
+            categories.push(cat);
+        }
+    }
+    
+    let selector = document.getElementById("category");
+    for (let c of categories){
+        let op = document.createElement(`option`);
+        op.innerHTML = c;
+        op.value = c;
+        selector.append(op);
+    }
 }
 
 
@@ -101,24 +131,72 @@ function goodDateToBad(dateStr, seperator){
 
 
 function chartData(){
-    let result = [];
-    for (let col of jsonData[1]){
-        let obj = {};
-        obj["x"] = new Date(goodDateToBad(col["Transaction Date"], "/"));
-        obj["y"] = col["Balance"];
+    /*
+    This function filters that data in order to only display the latest entry for any specific date.
+    This prevents multiple entry points per day on the graph and makes the graph more readable as a result
+    */
+    let fitleredData = [];
 
-        result.push(obj);
+    let rows = jsonData[1].length;
+    //console.log(`Graph data starting rows: ${rows}`);
+    let lastDate = jsonData[1][rows - 1][BANK[BANK_FORMATS.DATE]];
+    for (let i = rows - 1; i > 0 ; i --){
+        let row = jsonData[1][i];
+        let thisDate = row[BANK[BANK_FORMATS.DATE]];
+        if (thisDate != lastDate){
+            
+            let obj = {};
+            obj["x"] = new Date(goodDateToBad(lastDate, "/"));
+            
+            let prevRow = i == rows - 1 ? row : jsonData[1][i + 1];
+            obj["y"] = prevRow[BANK[BANK_FORMATS.BALANCE]];
+
+            fitleredData.push(obj);
+        }
+        lastDate = thisDate;
     }
-    console.log(result);
-    return result;
+
+    let obj = {};
+    obj["x"] = new Date(goodDateToBad(jsonData[1][0][BANK[BANK_FORMATS.DATE]], "/"));
+    obj["y"] = jsonData[1][0][BANK[BANK_FORMATS.BALANCE]];
+
+    fitleredData.push(obj);
+
+    //console.log(`Graph data starting rows: ${fitleredData.length}`);
+    return fitleredData;
 }
 
-let chart;
 function renderChart(){
     if (chart){
         chart.destroy();
+        chart = -1;
     }
     
+    const data = {
+        labels: [],
+        datasets: [{
+            label: 'Balance',
+            data: chartData(),
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    }
+
     const config = {
         type: 'line',
         options: {
@@ -126,57 +204,20 @@ function renderChart(){
                 x: {
                     type: 'time',
                     time: {
-                        unit: 'month'
+                        unit: "day"
                     }
                 }
             }
         },
-        data: {
-            labels: [],
-            datasets: [{
-                label: 'Balance',
-                data: chartData(),
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        }
+        data: data
     }
-    chart = new Chart(document.getElementById('myChart'), config);
+    chart = new Chart(document.getElementById('chart'), config);
 }
 
-
-// //Fill out Month select
-// for (let i = 1; i < 13; i ++){
-//     let selector = document.getElementById("month");
-//     let op = document.createElement(`option`);
-//     op.innerHTML = i;
-//     op.value = i;
-//     selector.append(op);
-// }
-
-//Fill out Day select
-for (let i = 1; i < 32; i ++){
-    let selector = document.getElementById("day");
-    let op = document.createElement(`option`);
-    op.innerHTML = i;
-    op.value = i;
-    selector.append(op);
+function accountChange(){
+    accountCurrent = document.getElementById("account").value;
+    getAllData(baseURL);
 }
-
+window.accountChange = accountChange;
 
 getAllData(baseURL);
