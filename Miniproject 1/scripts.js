@@ -8,6 +8,9 @@ array[1] = array of objects containing key value pairs, where each key is a head
 import * as BANK_FORMATS from "./Server/bankFormats.js";
 const BANK = BANK_FORMATS.BANKWEST;
 
+Chart.defaults.color = "white";
+Chart.defaults.borderColor = "grey";
+
 let firstTimeSetupComplete = false;
 const baseURL = "http://127.0.0.1:3000";
 let jsonData;
@@ -309,4 +312,15 @@ function accountChange(){
 }
 window.accountChange = accountChange;
 
-getAllData(baseURL);
+function monthChange(){
+    if (document.getElementById("month").value){
+        document.getElementById("weekContainer").style.display = "";
+    }
+    else{
+        document.getElementById("weekContainer").style.display = "none";
+    }
+    getAllData();
+}
+window.monthChange = monthChange;
+
+getAllData();

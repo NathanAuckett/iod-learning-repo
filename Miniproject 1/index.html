@@ -25,26 +25,26 @@
             </select>
         </div>
         <div>
-        <label for="month">Month</label>
-        <select id="month" onchange="getAllData()">
-            <option value="">All</option>
-            <option value="0">Jan</option>
-            <option value="1">Feb</option>
-            <option value="2">March</option>
-            <option value="3">April</option>
-            <option value="4">May</option>
-            <option value="5">June</option>
-            <option value="6">July</option>
-            <option value="7">Aug</option>
-            <option value="8">Sept</option>
-            <option value="9">Oct</option>
-            <option value="10">Nov</option>
-            <option value="11">Dec</option>
-        </select>
+            <label for="month">Month</label>
+            <select id="month" onchange="monthChange()">
+                <option value="">All</option>
+                <option value="0">Jan</option>
+                <option value="1">Feb</option>
+                <option value="2">March</option>
+                <option value="3">April</option>
+                <option value="4">May</option>
+                <option value="5">June</option>
+                <option value="6">July</option>
+                <option value="7">Aug</option>
+                <option value="8">Sept</option>
+                <option value="9">Oct</option>
+                <option value="10">Nov</option>
+                <option value="11">Dec</option>
+            </select>
         </div>
 
-        <div>
-        <label for="week">Week</label>
+        <div id="weekContainer" style="display: none;">
+            <label for="week">Week</label>
             <select id="week" onchange="getAllData()">
                 <option value="">All</option>
                 <option value="0">1</option>
@@ -71,8 +71,8 @@
         <h5 id="total" style="clear:none; display: inline"></h5>
     </div>
 
-    <div class="row">
-        <table id="data" class="table table-striped">
+    <div class="row" style="margin: 1rem">
+        <table id="data" class="table table-striped table-dark">
             <!--Data display here-->
         </table>
     </div>
