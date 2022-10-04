@@ -17,51 +17,47 @@ let jsonData;
 let accounts = [];
 let accountCurrent = "";
 let chart;
+let sourceFiles;
+let sourceChanged = false;
 
-//Populate the table with data
-function createTable(){
-    const table = document.getElementById("data");
-    table.innerHTML = "";
-    //Create Table head
-    let tableHead = document.createElement('thead');
-    let rowElement = document.createElement("tr");
-    for (let i of jsonData[0]){
-        let ele = document.createElement("th");
-        ele.innerHTML = i;
+async function getSourceFiles(){
+    const data = await fetch(baseURL+"/files");
+    sourceFiles = await data.json();
 
-        rowElement.append(ele);
-        tableHead.append(rowElement);
+    console.log(source);
+
+    let selector = document.getElementById("source");
+    for (let file of sourceFiles){
+        let op = document.createElement(`option`);
+        op.innerHTML = file;
+        op.value = file;
+        selector.append(op);
     }
 
-    //Create Table Body
-    let tableBody = document.createElement('tbody');
-    let colLength = jsonData[0].length;
-    for (let col of jsonData[1]){
-        rowElement = document.createElement("tr");
-        
-        for (let i = 0; i < colLength; i ++){
-            let value = col[jsonData[0][i]];
-
-            let ele = document.createElement("td");
-            ele.innerHTML = value;
-
-            rowElement.append(ele);
-            tableBody.append(rowElement);
-        }
+    if (sourceFiles.length == 1){
+        document.getElementById("sourceContainer").style.display = "none";
     }
-
-    table.append(tableHead);
-    table.append(tableBody);
+    else{
+        document.getElementById("sourceContainer").style.display = "";
+    }
 }
+getSourceFiles();
 
 //Get data, run first time setup, run createTable and renderChart if account is selected
 async function getAllData(){
+    const source = document.getElementById("source").value;
     const account = document.getElementById("account").value;
     const category = document.getElementById("category").value;
     const month = document.getElementById("month").value;
     const week = document.getElementById("week").value;
     
-    const data = await fetch(baseURL+`?account=${account}&category=${category}&month=${month}&week=${week}`);
+    let fetchURL = baseURL+`?source=${source}&account=${account}&category=${category}&month=${month}&week=${week}`;
+    if (sourceChanged){
+        fetchURL = baseURL+`?source=${source}`;
+    }
+    
+    const data = await fetch(fetchURL);
+    
     jsonData = await data.json();
 
     console.log("Data collected");
@@ -99,6 +95,18 @@ function firstTimeSetup(){
 
 //Extracts account numbers from data and populates account dropdown
 function getAccountNumbersFromData(){
+    accounts = [];
+    accountCurrent = "";
+    
+    let selector = document.getElementById("account");
+    selector.innerHTML = "";
+    
+    //Add All optiomn back in
+    let op = document.createElement(`option`);
+    op.innerHTML = "All";
+    op.value = "";
+    selector.append(op);
+
     for (let col of jsonData[1]){
         let accNum = col[BANK[BANK_FORMATS.ACCOUNT_NUMBER]];
         if (!accounts.includes(accNum)){
@@ -106,9 +114,9 @@ function getAccountNumbersFromData(){
         }
     }
     
-    let selector = document.getElementById("account");
+    //let selector = document.getElementById("account");
     for (let a of accounts){
-        let op = document.createElement(`option`);
+        op = document.createElement(`option`);
         op.innerHTML = a;
         op.value = a;
         selector.append(op);
@@ -132,6 +140,42 @@ function getCategoriesFromData(){
         op.value = c;
         selector.append(op);
     }
+}
+
+//Populate the table with data
+function createTable(){
+    const table = document.getElementById("data");
+    table.innerHTML = "";
+    //Create Table head
+    let tableHead = document.createElement('thead');
+    let rowElement = document.createElement("tr");
+    for (let i of jsonData[0]){
+        let ele = document.createElement("th");
+        ele.innerHTML = i;
+
+        rowElement.append(ele);
+        tableHead.append(rowElement);
+    }
+
+    //Create Table Body
+    let tableBody = document.createElement('tbody');
+    let colLength = jsonData[0].length;
+    for (let col of jsonData[1]){
+        rowElement = document.createElement("tr");
+        
+        for (let i = 0; i < colLength; i ++){
+            let value = col[jsonData[0][i]];
+
+            let ele = document.createElement("td");
+            ele.innerHTML = value;
+
+            rowElement.append(ele);
+            tableBody.append(rowElement);
+        }
+    }
+
+    table.append(tableHead);
+    table.append(tableBody);
 }
 
 
@@ -322,5 +366,14 @@ function monthChange(){
     getAllData();
 }
 window.monthChange = monthChange;
+
+async function sourceChange(){
+    sourceChanged = true;
+    accountCurrent = ""; //Force hides chart when getAllData runs
+    await getAllData();
+    getAccountNumbersFromData();
+    sourceChanged = false;
+}
+window.sourceChange = sourceChange;
 
 getAllData();
