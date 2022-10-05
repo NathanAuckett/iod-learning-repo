@@ -18,7 +18,7 @@ let accounts = [];
 let accountCurrent = "";
 let chart;
 let sourceFiles;
-let sourceChanged = false;
+let sourceChanged = true;
 
 async function getSourceFiles(){
     const data = await fetch(baseURL+"/files");
@@ -53,15 +53,17 @@ async function getAllData(){
     
     let fetchURL = baseURL+`?source=${source}&account=${account}&category=${category}&month=${month}&week=${week}`;
     if (sourceChanged){
+        //Clear month and week or they might filter out some account numbers preventing the dropdown population all options.
+        document.getElementById("month").value = "";
+        document.getElementById("week").value = "";
+
         fetchURL = baseURL+`?source=${source}`;
+        sourceChanged = false;
     }
     
     const data = await fetch(fetchURL);
     
     jsonData = await data.json();
-
-    console.log("Data collected");
-    console.log(jsonData);
     
     firstTimeSetup();
     createTable();
@@ -107,14 +109,13 @@ function getAccountNumbersFromData(){
     op.value = "";
     selector.append(op);
 
-    for (let col of jsonData[1]){
+    for (let col of jsonData.data){
         let accNum = col[BANK[BANK_FORMATS.ACCOUNT_NUMBER]];
         if (!accounts.includes(accNum)){
             accounts.push(accNum);
         }
     }
     
-    //let selector = document.getElementById("account");
     for (let a of accounts){
         op = document.createElement(`option`);
         op.innerHTML = a;
@@ -126,14 +127,23 @@ function getAccountNumbersFromData(){
 //Extracts categories from data and populates category dropdown
 function getCategoriesFromData(){
     const categories = [];
-    for (let col of jsonData[1]){
+    
+    let selector = document.getElementById("category");
+    selector.innerHTML = "";
+    
+    //Add All optiomn back in
+    let op = document.createElement(`option`);
+    op.innerHTML = "All";
+    op.value = "";
+    selector.append(op);
+    
+    for (let col of jsonData.data){
         let cat = col[BANK_FORMATS.CATEGORY];
         if (!categories.includes(cat)){
             categories.push(cat);
         }
     }
     
-    let selector = document.getElementById("category");
     for (let c of categories){
         let op = document.createElement(`option`);
         op.innerHTML = c;
@@ -149,7 +159,7 @@ function createTable(){
     //Create Table head
     let tableHead = document.createElement('thead');
     let rowElement = document.createElement("tr");
-    for (let i of jsonData[0]){
+    for (let i of jsonData.props){
         let ele = document.createElement("th");
         ele.innerHTML = i;
 
@@ -159,12 +169,12 @@ function createTable(){
 
     //Create Table Body
     let tableBody = document.createElement('tbody');
-    let colLength = jsonData[0].length;
-    for (let col of jsonData[1]){
+    let colLength = jsonData.props.length;
+    for (let col of jsonData.data){
         rowElement = document.createElement("tr");
         
         for (let i = 0; i < colLength; i ++){
-            let value = col[jsonData[0][i]];
+            let value = col[jsonData.props[i]];
 
             let ele = document.createElement("td");
             ele.innerHTML = value;
@@ -180,11 +190,11 @@ function createTable(){
 
 
 function calcTotalSpendingsOfData(){
-    let rows = jsonData[1].length;
+    let rows = jsonData.data.length;
     console.log(`Calculating totals for ${rows} of data.`);
     let total = 0;
     if (rows > 0){
-        for (let row of jsonData[1]){
+        for (let row of jsonData.data){
             let debit = row[BANK[BANK_FORMATS.DEBIT]];
             if (debit){
                 total += parseFloat(debit);
@@ -196,7 +206,7 @@ function calcTotalSpendingsOfData(){
         }
     }
     
-    return total;
+    return total.toFixed(2);
 }
 
 //Takes a date and seperator character, like /, and reverses the date. So dd:mm:yyyy becomes yyyy:mm:dd
@@ -213,18 +223,18 @@ function balanceData(){
     */
     let fitleredData = [];
 
-    let rows = jsonData[1].length;
+    let rows = jsonData.data.length;
     console.log(`Graph data starting rows: ${rows}`);
     if (rows > 0){
-        let lastDate = jsonData[1][rows - 1][BANK[BANK_FORMATS.DATE]];
+        let lastDate = jsonData.data[rows - 1][BANK[BANK_FORMATS.DATE]];
         for (let i = rows - 1; i > -1 ; i --){
-            let row = jsonData[1][i];
+            let row = jsonData.data[i];
             let thisDate = row[BANK[BANK_FORMATS.DATE]];
             if (thisDate != lastDate){
                 let obj = {};
                 obj["x"] = new Date(goodDateToBad(lastDate, "/"));
                 
-                let prevRow = i == rows - 1 ? row : jsonData[1][i + 1];
+                let prevRow = i == rows - 1 ? row : jsonData.data[i + 1];
                 obj["y"] = prevRow[BANK[BANK_FORMATS.BALANCE]];
 
                 fitleredData.push(obj);
@@ -233,8 +243,8 @@ function balanceData(){
         }
 
         let obj = {};
-        obj["x"] = new Date(goodDateToBad(jsonData[1][0][BANK[BANK_FORMATS.DATE]], "/"));
-        obj["y"] = jsonData[1][0][BANK[BANK_FORMATS.BALANCE]];
+        obj["x"] = new Date(goodDateToBad(jsonData.data[0][BANK[BANK_FORMATS.DATE]], "/"));
+        obj["y"] = jsonData.data[0][BANK[BANK_FORMATS.BALANCE]];
 
         fitleredData.push(obj);
     }
@@ -249,13 +259,13 @@ function spendingsData(){
     */
     let fitleredData = [];
 
-    let rows = jsonData[1].length;
+    let rows = jsonData.data.length;
     console.log(`Graph data starting rows: ${rows}`);
     if (rows > 0){
-        let lastDate = jsonData[1][rows - 1][BANK[BANK_FORMATS.DATE]];
+        let lastDate = jsonData.data[rows - 1][BANK[BANK_FORMATS.DATE]];
         let totalSpent = 0;
         for (let i = rows - 1; i > -1 ; i --){
-            let row = jsonData[1][i];
+            let row = jsonData.data[i];
             let spent = 0;
 
             let debit = row[BANK[BANK_FORMATS.DEBIT]];
@@ -281,7 +291,7 @@ function spendingsData(){
         }
 
         let obj = {};
-        obj["x"] = new Date(goodDateToBad(jsonData[1][0][BANK[BANK_FORMATS.DATE]], "/"));
+        obj["x"] = new Date(goodDateToBad(jsonData.data[0][BANK[BANK_FORMATS.DATE]], "/"));
         obj["y"] = totalSpent;
         
         fitleredData.push(obj);
@@ -372,7 +382,8 @@ async function sourceChange(){
     accountCurrent = ""; //Force hides chart when getAllData runs
     await getAllData();
     getAccountNumbersFromData();
-    sourceChanged = false;
+    getCategoriesFromData();
+    totalContainer.style.display = "none"; //Hide total as category value is being wiped.
 }
 window.sourceChange = sourceChange;
 

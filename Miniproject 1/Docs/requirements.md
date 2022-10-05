@@ -20,3 +20,28 @@ The graph should by default show the total balance after each transaction.
 As multiple transactions can occur on the same day, it may be nessesary to add up all transactions on a day in order to refine the data and display a cleaner graph.
 
 When ordering by category, to determine how much was spent per category, a line graph of total balance is no longer useful. In this case the graph should instead show the actual debit/credit values of each transaction.
+
+## Loading/managing mutliple CSV files
+- Ideally make server use async functions to prevent the entire server being locked up during load. However as this is a once off task... maybe not?
+
+Data structure - structure:
+```
+jsonData{
+    fileName0{
+        props[],
+        rows[
+            {data},
+            {data},
+            {data}
+        ]
+    },
+    fileName1[
+        props[],
+        rows[
+            {data},
+            {data},
+            {data}
+        ]
+    ],
+}
+```

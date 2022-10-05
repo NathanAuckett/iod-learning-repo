@@ -13,12 +13,20 @@ const port = 3000;
 
 
 const sourceFiles = readdirSync("./Source CSV files");
+const throwAwayFields = ["BSB Number", "Cheque Number", "Transaction Type"]; //Fields included in CSV to leave out of final data as it is not needed.
 let sourceIndex = 0;
 console.log(`Found source files: ` + sourceFiles);
 
 
-let props = []; //Holds headings from CSV file
-let jsonData = []; //Holds rows from CSV files as json, key value pairs. Keys are source from props array
+// let props = []; //Holds headings from CSV file
+// let jsonData = []; //Holds rows from CSV files as json, key value pairs. Keys are source from props array
+
+
+//Add objects to jsonData for each file
+let jsonData = {};
+for (let s = 0; s < sourceFiles.length; s ++){
+	jsonData[sourceFiles[s]] = loadAndPrepSouceFile(s);
+}
 
 
 function loadAndPrepSouceFile(fileIndex){
@@ -27,23 +35,19 @@ function loadAndPrepSouceFile(fileIndex){
 	console.log(sourceFile);
 
 	const csvData = readFileSync(sourceFile);
-
 	console.log(`Source data loaded. String length: ${csvData.length}`);
 
 	const csvDataArray = parse(csvData); //Parses csv string into 2D array representing grid like structure. First row is headers, following rows are data.
 
-	// Fields included in CSV to leave out of final data as it is not needed.
-	const throwAwayFields = ["BSB Number", "Cheque Number", "Transaction Type"];
-
-	props = []; //Clear fields
-	jsonData = []; //Clear fields
-
-	//Convert resulting 2D array of CSV data to JSON, array of objects with key value pairs
+	let props = [];
+	let data = {};
+	
 	// Extract headings from data. Leavig in throw-aways to keep arrays parallel for data extraction
 	for (let i of csvDataArray[0]){
 		props.push(i);
 	}
 
+	//Convert resulting 2D array of CSV data to JSON, array of objects with key value pairs
 	let dataLength = csvDataArray.length;
 	let propsLength = props.length;
 	let dataArray = [];
@@ -68,15 +72,19 @@ function loadAndPrepSouceFile(fileIndex){
 
 	console.log(`Data headers: [${props}]`);
 
-	jsonData.push(props); //Push headings into JSON
-	jsonData.push(dataArray); //Push data into JSON
+	data["props"] = props; //Push headings into JSON
+	data["data"] = dataArray; //Push data into JSON
+
+	return data;
 }
 
+console.log(jsonData);
 
-if (sourceFiles.length > 0){
-	console.log("Loading first file in source folder!");
-	loadAndPrepSouceFile(0);
-}
+
+// if (sourceFiles.length > 0){
+// 	console.log("Loading first file in source folder!");
+// 	loadAndPrepSouceFile(0);
+// }
 
 //Takes a date(dd:mm:yy) and sperator character, like /, and converts it to mm:dd:yy
 function goodDateToBad(dateStr, seperator){
@@ -85,23 +93,23 @@ function goodDateToBad(dateStr, seperator){
 }
 
 function filterToMonth(srcData, monthNum){
-	let data = [];
-	let entries = srcData[1].filter((element) =>{
+	let data = {};
+	let entries = srcData.data.filter((element) =>{
 		let eleDate = new Date(goodDateToBad(element[BANK[BANK_FORMATS.DATE]], "/"));
 		if (eleDate.getMonth() === monthNum){
 			return element;
 		}
 	});
 	
-	data.unshift(entries);
-	data.unshift(props);
+	data["data"] = entries;
+	data["props"] = srcData.props;
 
 	return data;
 }
 
 function filterToWeek(srcData, weekNum){
-	let data = [];
-	let entries = srcData[1].filter((element) =>{
+	let data = {};
+	let entries = srcData.data.filter((element) =>{
 		let eleDate = new Date(goodDateToBad(element[BANK[BANK_FORMATS.DATE]], "/"));
 		eleDate = eleDate.getDate();
 		eleDate = Math.floor(eleDate / 7); //Convert day to week
@@ -111,36 +119,36 @@ function filterToWeek(srcData, weekNum){
 		}
 	});
 	
-	data.unshift(entries);
-	data.unshift(props);
+	data["data"] = entries;
+	data["props"] = srcData.props;
 
 	return data;
 }
 
 function filterToAccount(srcData, accountNum){
-	let data = [];
-	let entries = srcData[1].filter((element) =>{
+	let data = {};
+	let entries = srcData.data.filter((element) =>{
 		if (element[BANK[BANK_FORMATS.ACCOUNT_NUMBER]] === accountNum){
 			return element;
 		}
 	});
 	
-	data.unshift(entries);
-	data.unshift(props);
+	data["data"] = entries;
+	data["props"] = srcData.props;
 
 	return data;
 }
 
 function filterToCategory(srcData, category){
-	let data = [];
-	let entries = srcData[1].filter((element) =>{
+	let data = {};
+	let entries = srcData.data.filter((element) =>{
 		if (element[BANK_FORMATS.CATEGORY] === category){
 			return element;
 		}
 	});
 	
-	data.unshift(entries);
-	data.unshift(props);
+	data["data"] = entries;
+	data["props"] = srcData.props;
 
 	return data;
 }
@@ -148,8 +156,8 @@ function filterToCategory(srcData, category){
 
 // Server responses
 app.get('/', (req, res) => { //Return all data
-	if (jsonData.length == 0){
-		console.log("Request received but no source data is loaded!");
+	if (sourceFiles.length == 0){
+		console.log("Request received but no source files were present for loading!");
 		let failed = {
 			success: false,
 			message: "No source data loaded in server. Cannot retreive data."
@@ -168,10 +176,9 @@ app.get('/', (req, res) => { //Return all data
 	if (source && source != sourceFiles[sourceIndex] && sourceFiles.includes(source)){
 		console.log("Switching source.");
 		sourceIndex = sourceFiles.indexOf(source);
-		loadAndPrepSouceFile(sourceIndex);
 	}
 
-	let returnData = jsonData;
+	let returnData = jsonData[sourceFiles[sourceIndex]];
 
 	if (account){
 		returnData = filterToAccount(returnData, account);
