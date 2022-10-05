@@ -18,10 +18,6 @@ let sourceIndex = 0;
 console.log(`Found source files: ` + sourceFiles);
 
 
-// let props = []; //Holds headings from CSV file
-// let jsonData = []; //Holds rows from CSV files as json, key value pairs. Keys are source from props array
-
-
 //Add objects to jsonData for each file
 let jsonData = {};
 for (let s = 0; s < sourceFiles.length; s ++){
@@ -80,11 +76,6 @@ function loadAndPrepSouceFile(fileIndex){
 
 console.log(jsonData);
 
-
-// if (sourceFiles.length > 0){
-// 	console.log("Loading first file in source folder!");
-// 	loadAndPrepSouceFile(0);
-// }
 
 //Takes a date(dd:mm:yy) and sperator character, like /, and converts it to mm:dd:yy
 function goodDateToBad(dateStr, seperator){
