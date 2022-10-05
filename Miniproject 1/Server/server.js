@@ -74,8 +74,6 @@ function loadAndPrepSouceFile(fileIndex){
 	return data;
 }
 
-console.log(jsonData);
-
 
 //Takes a date(dd:mm:yy) and sperator character, like /, and converts it to mm:dd:yy
 function goodDateToBad(dateStr, seperator){
