@@ -74,10 +74,10 @@
 
     <div id="totalContainer" class="row text-end" style="display: none">
         <h4 style="clear:none; display: inline">Filtered Category Total: </h4>    
-        <h5 id="total" style="clear:none; display: inline"></h5>
+        <h5 id="total" style="clear:none; display: inline"></h5> <!-- jo: try and move these kinds of inline styles into the CSS file using classes -->
     </div>
     
-    <div class="row" style="margin: 1rem">
+    <div class="row" style="margin: 1rem"> <!-- jo: try and move these kinds of inline styles into the CSS file using classes -->
         <table id="data" class="table table-striped table-dark">
             <!--Data display here-->
         </table>
@@ -88,8 +88,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
-    <script type="module" src="./Server/bankFormats.js"></script>
-    <script type="module" src="./scripts.js"></script>
+    <script type="module" src="http://127.0.0.1:3000/bankFormats.js"></script>
+    <script type="module" src="http://127.0.0.1:3000/scripts.js"></script>
 
 </body>
 </html>

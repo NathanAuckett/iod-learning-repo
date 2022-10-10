@@ -4,7 +4,7 @@ import { parse } from '@vanillaes/csv';
 import {readFileSync, readdirSync} from 'fs';
 import {getCategory} from "./categories.js";
 
-import * as BANK_FORMATS from "./bankFormats.js";
+import * as BANK_FORMATS from "./public/bankFormats.js";
 const BANK = BANK_FORMATS.BANKWEST;
 
 const app = express();
@@ -34,6 +34,7 @@ function loadAndPrepSouceFile(fileIndex){
 	console.log(`Source data loaded. String length: ${csvData.length}`);
 
 	const csvDataArray = parse(csvData); //Parses csv string into 2D array representing grid like structure. First row is headers, following rows are data.
+	// jo: read https://medium.com/@DominicCarmel/understanding-javascripts-weird-decimal-calculations-e65f0e1adefb to know why the decimals come out weird
 
 	let props = [];
 	let data = {};
@@ -191,6 +192,8 @@ app.get('/', (req, res) => { //Return all data
 app.get('/files', (req, res) => { //Return all data
 	res.json(sourceFiles);
 });
+
+app.use('/', express.static('public')) //this lets you serve public files like html, scripts, styles, from your express server
 
 // Run server
 app.listen(port, () => {

@@ -5,7 +5,7 @@ array[0] = array of headers
 array[1] = array of objects containing key value pairs, where each key is a header from array [0]. Every object contains every key, although some may contain empty string values.
 */
 
-import * as BANK_FORMATS from "./Server/bankFormats.js";
+import * as BANK_FORMATS from "http://127.0.0.1:3000/bankFormats.js";
 const BANK = BANK_FORMATS.BANKWEST;
 
 Chart.defaults.color = "white";
