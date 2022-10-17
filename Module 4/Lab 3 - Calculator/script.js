@@ -15,7 +15,7 @@ function calculate(){
     const inputElement = document.getElementById("input");
     const input = inputElement.value;
     let op = "";
-    for (c of input){
+    for (let c of input){ 
         if (!nums.includes(c)){
             op = c;
             break;

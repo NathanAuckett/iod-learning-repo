@@ -44,7 +44,7 @@
         console.log(artist);
 
         //Loop through portfolio and add a portfolio card for every object in the array
-        for (i of _artist.portfolio){
+        for (let i of _artist.portfolio){ //dont forget to use let, and try to pick a more descriptive variable name than just i
             const portfolio = document.getElementById("portfolio-card").content.cloneNode(true);
             portfolio.querySelector('.card-title').innerText = i["title"];
             portfolio.querySelector('.card-image').src = i["url"];

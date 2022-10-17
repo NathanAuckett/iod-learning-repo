@@ -47,7 +47,7 @@
         document.querySelector('#card-list').appendChild(template);
     }
 
-    for (i of data){
-        addCard(i['name'], i['age']);
+    for (i of data){ //don't forget to initialise variables with let
+        addCard(i['name'], i['age']); //you could also pass in a single argument i and then in addCard extract the properties
     }
 </script>
