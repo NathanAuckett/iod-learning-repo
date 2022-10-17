@@ -9,7 +9,7 @@ CATEGORIES["Rent"] = ["rent", "Board", "RENTAL BOND"];
 CATEGORIES["Haircuts"] = ["BARBER", "STATE"];
 CATEGORIES["Electricity"] = ["ENERGY LOCALS", "Tricity", "electricity"];
 CATEGORIES["Credit Card Payoff"] = ["credit card", "payoff"];
-CATEGORIES["Internal Account Transfers"] = ["transfer", "Credit Bonus Trans"];
+CATEGORIES["Internal Account Transfers"] = ["transfer", "Credit Bonus Trans", "Bank system error"];
 CATEGORIES["Salary/Income"] = ["salary", "PACKT"];
 CATEGORIES["Education"] = ["INSTITUTE OF DATA", "PRO DIVE", "IOD"];
 CATEGORIES["Car/rego"] = ["SERVICE NSW", "ALLIANZ", "MPH PARTS PTY", "REPCO", "car"];
@@ -23,17 +23,18 @@ CATEGORIES["Misc Items"] = ["BUNNINGS", "THE REJECT SHOP", "SPOTLIGHT", "OFFICEW
                             "MYER", "TARGET", "ANACONDA"];
 CATEGORIES["Electronics"] = ["laptop", "Bing Lee", "DYSON", "HARVEY NORMAN", "Samsung"];
 CATEGORIES["Entertainment"] = ["movie", "CINEMA", "ticket", "tickets", "bbq", "PAX", "HOYTS", "Enmore Theatre", "GOSFORD CITY TENPI",
-                            "Erina Ice", "Paintball", "holy Moley"];
+                            "Erina Ice", "Paintball", "holy Moley", "FORTRESS", "SEA LIFE"];
 CATEGORIES["Food"] = ["food", "hello fresh", "shopping", "groceries", "woolies", "pizza", "Hungry Wolfs", "GYG", "chinese", "MCDONALDS",
                         "Maccas", "WOOLWORTHS", "Coles", "Grilld", "Frederico's", "IGA", "KFC", "CAFE", "ALDI", "FOODWORKS",
                         "SWEET CAROLINE", "Rhonda's", "MAD MEX", "South End Social", "Charcoal", "DONUT KING", "Subway", "Dominos",
                         "THE BON PAVILION", "MENULOGPTYL", "KAFICH", "MUMBO JUMBOS TERRIGAL", "The Bayview", "The Grange Hotel", "Milky Lane",
                         "dinner", "yum", "CHOCOLATERIA SAN C", "Zero Fox",  "TAKEAWAY", "COFFEE", "CANDY", "KSP GROUP PTY LTD", "thai", "Brekkie",
-                        "Fud"];
-CATEGORIES["Alcohol"] = ["alcohol", "BWS", "DAN MURPHY'S", "LIQUORLAND", "CELLARS", "BAR", "beer", "jug", "OZT*DRIFTERS", "Lyons Den",
+                        "Fud", "Saporito", "HAKATA GENSUKE", "Doughnuts", "SCHNITZ", "RWS SOUTH WHARF", "Zero Gradi Crown", "HOKKA HOKKA", "Breakfast",
+                        "breaky", "Five Guys", "Korean Barbecue", "indian"];
+CATEGORIES["Alcohol"] = ["alcohol", "alchohol", "BWS", "DAN MURPHY'S", "LIQUORLAND", "CELLARS", "BAR", "beer", "jug", "OZT*DRIFTERS", "Lyons Den",
                             "Hotel Gosford", "Hillbilly Cider", "Bay Rd Brewing", "THE TERRIGAL HOTEL", "Settlers Tavern", "Hope Estate",
-                            "RSL", "ELANORA HOTEL", "CTRL COAST LEAGUES"];
-CATEGORIES["Travel/Transport/Accommodation"] = ["TRAVEL", "Flight", "Flights", "TRANSPORTFORNSW", "TAXI", "uber", "Hotel", "KIMS TOOWOON BAY"];
+                            "RSL", "ELANORA HOTEL", "CTRL COAST LEAGUES", "SKYBUS", "MEXICAN", "GOZLEME"];
+CATEGORIES["Travel/Transport/Accommodation"] = ["TRAVEL", "Flight", "Flights", "TRANSPORTFORNSW", "TAXI", "uber", "Hotel", "KIMS TOOWOON BAY", "AIRPORT", "trip", "Cab"];
 CATEGORIES["Misc Online Purchases"] = ["paypal", "AMZN", "AMAZON"];
 CATEGORIES["Tax"] = ["tax", "JAMES RYAN PARTNER", "JamesRyanPartner"];
 
