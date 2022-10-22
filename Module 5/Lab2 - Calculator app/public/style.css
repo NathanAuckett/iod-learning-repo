@@ -1,0 +1,25 @@
+body {
+    background-color: rgb(104, 104, 104);
+}
+
+input {
+    width: 16rem;
+    margin: 1rem 1rem;
+}
+
+button {
+    width: 5rem;
+    height: 4rem;
+    margin: 0.2rem;
+}
+
+#calculate {
+    width: 16rem;
+    height: 4rem;
+    margin: 1rem;
+}
+
+h1 {
+    font-size: 3.5rem;
+    color:rgb(255, 255, 255);
+}
