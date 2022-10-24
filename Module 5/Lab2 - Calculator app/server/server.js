@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const swaggerUI = require("swagger-ui-express");
+swaggerDocument = require('../swagger.json');
 
 const app = express();
 const port = 3000;
@@ -14,6 +16,11 @@ app.get("/", (req, res) => {
 
 app.use(cors());
 app.use('/', express.static('public'));
+app.use(
+  '/api-docs',
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerDocument)
+);
 
 app.use("/calculator", calculator);
 
