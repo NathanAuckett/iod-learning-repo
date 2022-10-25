@@ -12,7 +12,7 @@ Chart.defaults.color = "white";
 Chart.defaults.borderColor = "grey";
 
 let firstTimeSetupComplete = false;
-const baseURL = "http://127.0.0.1:3000";
+const baseURL = "http://127.0.0.1:3000/data";
 let jsonData;
 let accounts = [];
 let accountCurrent = "";

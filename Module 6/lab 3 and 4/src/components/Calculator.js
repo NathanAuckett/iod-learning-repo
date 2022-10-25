@@ -2,7 +2,6 @@ import { useState } from "react"
 
 const calculateLib = require("calculator-lib");
 
-
 export default function Calculator(){
     const [input, setInput] = useState("")
     function handleChange(event){
