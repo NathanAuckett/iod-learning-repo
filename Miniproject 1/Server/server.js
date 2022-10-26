@@ -6,9 +6,9 @@ const app = express();
 app.use(cors());
 const port = 3000;
 
-app.get('/files', (req, res) => { //Return all data
-	res.json(sourceFiles);
-});
+// app.get('/files', (req, res) => { //Return all data
+// 	res.json(sourceFiles);
+// }); //done via routes/controller instead
 
 app.use("/data", router);
 

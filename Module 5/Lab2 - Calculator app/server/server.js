@@ -9,9 +9,9 @@ const port = 3000;
 const calculator = require('./routes/calculatorRoute.js');
 
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hello World!");
+// }); //this will override the mapping to the public directory if you leave it in
 
 
 app.use(cors());

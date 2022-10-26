@@ -19,7 +19,8 @@ function add(req, res) {
     const num2 = parseInt(req.query.num2);
     
     res.status(200);
-    res.json({result: num1 + num2});
+    //should use the library/model for these calculations, same for -,*,/
+    res.json({result: myCalc.add(num1,num2)});
 }
 
 function subtract(req, res) {

@@ -16,10 +16,17 @@ class Calculator {
     calculate(req, res){
         const expression = req.query.exp;
         
-        const result = calculateLib.evaluateInfix(expression);
+        const result = calculateLib.evaluateInfix(expression); //definitely looks like a better option than eval
 
         log.log(this.constructor.name, this.id, result);
 
+        return result;
+    }
+
+    //for the purposes of the exercise, should ideally have individual functions like this too, and for -,*,/
+    add(num1, num2) {
+        let result = num1+num2;
+        log.log(this.constructor.name, this.id, result);
         return result;
     }
 }
