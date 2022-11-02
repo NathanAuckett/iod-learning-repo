@@ -24,6 +24,7 @@ function App() {
     }
     console.log(emote);
   }
+  //the above should probably be all contained in the Emoji component?
 
   return (
     <div className="App">
@@ -41,7 +42,7 @@ function App() {
           Learn React
         </a>
 
-        <button onClick={changeEmote} style={{margin: "1rem"}}>Change</button>
+        <button onClick={changeEmote} style={{margin: "1rem"}}>Change</button> {/* probably belongs in the Emoji component too */}
         <Emoji type={emote}/>
         <Calculator/>
 

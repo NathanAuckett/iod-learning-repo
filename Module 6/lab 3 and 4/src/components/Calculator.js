@@ -13,13 +13,14 @@ export default function Calculator(){
         try {
             setResult(calculateLib.evaluateInfix(input));
         }
-        catch{}
+        catch (e) { setResult(e.toString()) } //just so they have some idea what went wrong
     }
 
     return (
         <div style={{margin: "1rem"}}>
-            <label for="input">Enter equation: </label>
+            <label htmlFor="input">Enter equation: </label>
             <div><input id="input" type="text" onChange={handleChange}></input></div>
+            {/* you could also shortcut this and just do onChange={(e) => setInput(e.target.value)} */}
             
             <button onClick={calculate}>Calculate</button>
 

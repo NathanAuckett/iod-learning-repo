@@ -1,5 +1,5 @@
-
-function emoji(props){
+//react components are capitalised by convention
+function Emoji(props){
     const type = props.type;
 
     switch (type){
@@ -11,4 +11,4 @@ function emoji(props){
     
 }
 
-export default emoji;
+export default Emoji;
