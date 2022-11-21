@@ -8,8 +8,8 @@ import { Container, Row, Col} from 'react-bootstrap';
 
 import { Route, Switch} from 'react-router-dom';
 
-import Notes from "./pages/Notes"
-import NoteView from "./pages/NoteView/NoteView"
+import Notes from "./pages/Notes";
+import NoteView from "./pages/NoteView/NoteView";
 
 function App() {
   

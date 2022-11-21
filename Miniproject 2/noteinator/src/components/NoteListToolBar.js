@@ -2,7 +2,7 @@
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
-import newIcon from "../icons/new.svg"
+import newIcon from "../icons/new.svg";
 
 export default function NoteListToolBar(){
     return (
