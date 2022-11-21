@@ -4,11 +4,9 @@ This app only works with Chromium Browsers due to limitations and bugs in Firefo
 
 import './App.css';
 
-import React, { useEffect, useState } from 'react';
-
 import { Container, Row, Col} from 'react-bootstrap';
 
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch} from 'react-router-dom';
 
 import Notes from "./pages/Notes"
 import NoteView from "./pages/NoteView/NoteView"
