@@ -3,13 +3,15 @@ import React from 'react';
 import {FileSystemContext} from "../context/FileSystemContext"
 
 import Button from 'react-bootstrap/Button';
-import { Container, Row} from 'react-bootstrap';
+import {Row} from 'react-bootstrap';
 
 import NoteList from "../components/NoteList"
 import NoteListToolBar from '../components/NoteListToolBar';
 
+import {getJsonOfAllFilesInDir} from "../fileSystemFunctions"
+
 export default function Notes() {
-    const {getJsonOfAllFilesInDir, workingDir, setWorkingDir, setNoteFiles} = React.useContext(FileSystemContext);
+    const {workingDir, setWorkingDir, setNoteFiles} = React.useContext(FileSystemContext);
 
     async function setDirectory(){
         const dir = await window.showDirectoryPicker();
@@ -25,12 +27,12 @@ export default function Notes() {
     return (
         <>
             <Row className='justify-content-center text-center' style={{marginBottom: "1rem"}}>
-                {workingDir === "" ? <Button onClick={setDirectory} style={{width: "max-content"}}>Set working directory</Button> :
+                {workingDir === "" ? <Button variant="light" onClick={setDirectory} style={{width: "max-content"}}>Set working directory</Button> :
                     <NoteListToolBar/>
                 }
             </Row>
             
-            <Row className='justify-content-center'>
+            <Row>
                 <NoteList/>
             </Row>
         </>

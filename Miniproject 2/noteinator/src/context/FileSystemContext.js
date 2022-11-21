@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 
-import {getJsonOfAllFilesInDir, save, saveAs} from "../fileSystemFunctions"
-
-
 export const FileSystemContext = React.createContext("");
 
 export const FileSystemContextProvider = ({ children }) => {
@@ -10,7 +7,7 @@ export const FileSystemContextProvider = ({ children }) => {
   const [noteFiles, setNoteFiles] = useState([]);
 
   return (
-    <FileSystemContext.Provider value={{getJsonOfAllFilesInDir, save, saveAs, workingDir, setWorkingDir, noteFiles, setNoteFiles}}>
+    <FileSystemContext.Provider value={{workingDir, setWorkingDir, noteFiles, setNoteFiles}}>
       {children}
     </FileSystemContext.Provider>
   );

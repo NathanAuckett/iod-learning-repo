@@ -38,8 +38,13 @@ async function saveAs(dirHandle, fileName, jsonString){
     await save(fileHandle, jsonString);
 }
 
+async function remove(dirHandle, fileName){
+    await dirHandle.removeEntry(fileName);
+}
+
 export {
     getJsonOfAllFilesInDir,
     save,
-    saveAs
+    saveAs,
+    remove
 }

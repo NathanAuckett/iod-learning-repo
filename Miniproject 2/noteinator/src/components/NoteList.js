@@ -1,7 +1,7 @@
 import React from 'react';
 import {FileSystemContext} from "../context/FileSystemContext"
 
-import NotePreviewCard from "./NotePreviewCard";
+import NotePreviewCard from "./NotePreviewCard/NotePreviewCard";
 
 import {Row} from 'react-bootstrap';
 

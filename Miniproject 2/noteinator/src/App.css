@@ -1,0 +1,13 @@
+
+.view-height{
+    min-height: 100vh;
+}
+
+.icon {
+    width: 2rem;
+    /* filter: invert(95%) sepia(0%) saturate(7491%) hue-rotate(316deg) brightness(103%) contrast(106%); */
+}
+
+.btn {
+    margin: 0.1rem;
+}
