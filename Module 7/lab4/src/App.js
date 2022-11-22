@@ -7,7 +7,7 @@ import MediaCard from "./components/MediaCard"
 import {useState } from 'react';
 
 import NewPost from './components/NewPost'
-import {JSON} from './backend.js'
+import {JSON} from './backend.js' //good idea to avoid needing an actual API that accepts posts
 
 function App() {
   const [posts, setPosts] = useState(JSON);

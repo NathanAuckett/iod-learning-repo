@@ -10,7 +10,7 @@ function Emoji(){
         switch (emoji){
             case "😞": setEmoji("🙂"); break;
             case "🙂": setEmoji("😞"); break;
-            default: emoji = "❓";
+            default: setEmoji("❓"); //emoji is a const and part of state, so we don't change it directly but use the setEmoji func instead
         }
     }
 
