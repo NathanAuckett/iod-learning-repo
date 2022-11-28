@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory} from "react-router-dom";
 
 import {Button} from "react-bootstrap";
-import {confirm} from 'react-bootstrap-confirmation';
+import {confirm} from 'react-bootstrap-confirmation';
 
 import {FileSystemContext} from "../context/FileSystemContext"
 import {getJsonOfAllFilesInDir, remove} from "../fileSystemFunctions"

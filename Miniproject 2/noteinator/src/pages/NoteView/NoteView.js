@@ -50,7 +50,7 @@ export default function NoteView(){
             // Find a free name in the array of files
             let count = 0;
             for (let note of noteFiles){
-                if (note.fileName == `note${count}.json`){
+                if (note.fileName === `note${count}.json`){
                     count ++;
                 }
                 else{
@@ -91,7 +91,7 @@ export default function NoteView(){
             <Row className='mb-1'>
                 <Col>
                     {editing ? 
-                        <input type="text" className='title text-light'onChange={(e) => {setTitle(e.target.value)}} value={title} placeholder={"Note Title"}/>
+                        <input type="text" className='title text-light' onChange={(e) => {setTitle(e.target.value)}} value={title} placeholder={"Note Title"}/>
                         :
                         <h2 className='text-light'>{title}</h2>
                     }
@@ -103,7 +103,8 @@ export default function NoteView(){
                     {editing ? 
                         <MDEditor value={content} onChange={setContent} autoFocus height={"100%"} visibleDragbar={false}/>
                         :
-                        <MDEditor.Markdown source={content} style={{backgroundColor: "inherit", color: "inherit"}}/>
+                        /* using a transparent darker shade as the background color just differentiates the text area from the rest of the screen */
+                        <MDEditor.Markdown source={content} style={{backgroundColor: 'rgba(0,0,0,0.4)', padding: '1em', color: "inherit"}}/>
                     }
                 </Col>
             </Row>

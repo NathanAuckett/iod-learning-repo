@@ -10,9 +10,9 @@ export default function NoteList(){
 
     return (
         <div>
-            {noteFiles.length === 0 ? null : noteFiles.map((file) => {
+            {noteFiles.length === 0 ? null : noteFiles.map((file, index) => {
                 return (
-                    <Row className='justify-content-center'>
+                    <Row className='justify-content-center' key={index}>
                         <NotePreviewCard file={file}/>
                     </Row>
                 )
