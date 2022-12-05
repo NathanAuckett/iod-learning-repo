@@ -17,6 +17,6 @@
 
 ## Programming concepts used
 - React
-    - Components
+    - Functional Components
     - State
     - Context

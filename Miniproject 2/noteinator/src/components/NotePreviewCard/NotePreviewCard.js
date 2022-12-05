@@ -5,7 +5,7 @@ import { Link} from 'react-router-dom';
 
 import MDEditor from '@uiw/react-md-editor';
 
-import "./NotePreviewCard.css"
+import "./NotePreviewCard.css";
 
 
 function ViewNoteOnClick({ file, children }){
