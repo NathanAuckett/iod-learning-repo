@@ -1,3 +1,6 @@
+import React from 'react';
+import {LoginContext} from "./LoginContext";
+import {useNavigate} from 'react-router-dom'
 
 import Grid from '@mui/material/Unstable_Grid2';
 import Paper from '@mui/material/Paper';
@@ -6,11 +9,38 @@ import Button from '@mui/material/Button';
 
 import { useState } from 'react';
 
-export function LoginSignupField() {
+export function LoginSignupField(props) {
+    const navigate = useNavigate();
+    const {setLoggedIn} = React.useContext(LoginContext);
+
     const [signup, setSignup] = useState(false);
-    
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+
     function toggleSignup(){
         setSignup(!signup);
+    }
+
+    async function login(){
+        const json = JSON.stringify({"email": email, "password": password});
+        
+        const response = await fetch("http://127.0.0.1:4000/users/authenticate", {
+            method: 'POST',
+            headers: {
+                'Accept': '*/*',
+                'Content-Type': 'application/json'
+            },
+            body: json
+        });
+        
+        const data = await response.json();
+
+        if (data.result === 200){
+            setLoggedIn(true);
+            navigate("/dashboard");
+        }
     }
 
     return (
@@ -25,14 +55,14 @@ export function LoginSignupField() {
                         }
                     </Grid>
                     <Grid>
-                        <TextField variant="standard" label="Email"/>
+                        <TextField variant="standard" label="Email" onChange={(e) => {setEmail(e.target.value)}}/>
                     </Grid>
                     <Grid>
-                        <TextField variant="standard" label="Password"/>
+                        <TextField variant="standard" label="Password" onChange={(e) => {setPassword(e.target.value)}}/>
                     </Grid>
                     {signup ? 
                         <Grid>
-                            <TextField variant="standard" label="Confirm Password"/>
+                            <TextField variant="standard" label="Confirm Password" onChange={(e) => {setConfirmPassword(e.target.value)}}/>
                         </Grid>
                         : null
                     }
@@ -58,7 +88,7 @@ export function LoginSignupField() {
                                 {signup ?
                                     <Button variant="contained">Sign up</Button>
                                 :
-                                    <Button variant="contained">Login</Button>
+                                    <Button variant="contained" onClick={login}>Login</Button>
                                 }
                                 
                             </Grid>
