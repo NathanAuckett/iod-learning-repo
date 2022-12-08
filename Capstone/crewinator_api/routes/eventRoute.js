@@ -3,15 +3,11 @@ const router = express.Router();
 const Controllers = require('../controllers');
 
 router.post("/create", (req, res) => {
-  Controllers.UserController.createUser(req.body, res);
-});
-
-router.post("/authenticate", (req, res) => {
-  Controllers.UserController.authenticateUser(req.body, res);
+  Controllers.EventController.createEvent(req.body, res);
 });
 
 router.get("/", (req, res) => {
-  Controllers.UserController.getUsers(res);
+  Controllers.EventController.getEvents(res);
 });
 
 module.exports = router;
